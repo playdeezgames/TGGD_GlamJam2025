@@ -15,6 +15,9 @@ input_method = HiddenInputField
 [html5]
 scale_mode = fit
 cssfile = /builtins/manifests/web/dark_theme.css
+show_fullscreen_button = 0
+show_console_banner = 0
+show_made_with_defold = 0
 
 [project]
 title = Squeeeee

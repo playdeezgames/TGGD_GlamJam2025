@@ -31,6 +31,54 @@ function init(self)
 	msg.post("@render:", "clear_color", { color = vmath.vector4(1, 0.75, 1, 0) } )
 end
 
+local deltas = {
+	{x=0,y=1},
+	{x=1,y=0},
+	{x=0,y=-1},
+	{x=-1,y=0}
+}
+
+local function get_neighbor_count(column, row)
+	if column<1 or row<1 or column>BOARD_COLUMNS or row>BOARD_ROWS then return 0 end
+	if board_tiles[column][row] == 0 then return 0 end
+	local result = 0
+	local current_tile = board_tiles[column][row]
+	for _, delta in ipairs(deltas) do
+		local next_column = column + delta.x
+		local next_row = row + delta.y
+		if next_column>=1 and next_row>=1 and next_column<=BOARD_COLUMNS and next_row<=BOARD_ROWS then
+			local next_tile = board_tiles[next_column][next_row]
+			if current_tile == next_tile then
+				result = result + 1
+			end
+		end
+	end
+	return result
+end
+
+local function set_tile_glow(column, row)
+	if column<1 or row<1 or column>BOARD_COLUMNS or row>BOARD_ROWS then return end
+	if board_tiles[column][row] == 0 then return end
+	if board_glow[column][row] ~= 0 then return end
+	if get_neighbor_count(column, row) == 0 then
+		board_glow[column][row] = RED_TILE
+	else
+		board_glow[column][row] = GREEN_TILE
+		for _, delta in ipairs(deltas) do
+			local next_column = column + delta.x
+			local next_row = row + delta.y
+			if next_column>=1 and next_row>=1 and next_column<=BOARD_COLUMNS and next_row<=BOARD_ROWS then
+				local current_tile = board_tiles[column][row]
+				local next_tile = board_tiles[next_column][next_row]
+				if current_tile == next_tile then
+					set_tile_glow(next_column, next_row)
+				end
+			end
+		end
+	end
+end
+	
+
 local function update_glow()
 	for column = 1, BOARD_COLUMNS do
 		for row = 1, BOARD_ROWS do
@@ -38,8 +86,46 @@ local function update_glow()
 		end
 	end
 	if hover_column>=1 and hover_column<=BOARD_COLUMNS and hover_row>=1 and hover_row<=BOARD_ROWS then
-		board_glow[hover_column][hover_row] = RED_TILE
+		set_tile_glow(hover_column, hover_row)
 	end
+end
+
+local function remove_tile(column, row)
+	if board_glow[column][row] == GREEN_TILE then
+		for r = row, BOARD_ROWS - 1 do
+			board_tiles[column][r] = board_tiles[column][r+1]
+			board_glow[column][r] = board_glow[column][r+1]
+		end
+		board_tiles[column][BOARD_ROWS] = 0
+		board_glow[column][BOARD_ROWS] = 0
+	end
+end
+
+local function remove_columns()
+	local slide = true
+	while slide do
+		slide = false
+		for column = BOARD_COLUMNS, 2, -1 do
+			if board_tiles[column][1] ~= 0 and board_tiles[column-1][1] == 0 then
+				local dummy = board_tiles[column]
+				board_tiles[column] = board_tiles[column-1]
+				board_tiles[column-1] = dummy
+				slide = true
+			end
+		end
+	end
+end
+
+local function make_move()
+	for column = 1, BOARD_COLUMNS do
+		for row = 1, BOARD_ROWS do
+			while board_glow[column][row] == GREEN_TILE do
+				remove_tile(column, row)
+			end
+		end
+	end
+	remove_columns()
+	update_glow()	
 end
 
 function update(self, dt)
@@ -66,5 +152,7 @@ function on_input(self, action_id, action)
 		hover_column = math.floor((action.x - BOARD_OFFSET_X) / COLUMN_WIDTH) + 1
 		hover_row = math.floor((action.y - BOARD_OFFSET_Y) / ROW_HEIGHT) + 1
 		update_glow()
+	elseif action_id==hash("click") and action.pressed then
+		make_move()
 	end
 end
