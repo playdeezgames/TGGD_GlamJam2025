@@ -15,6 +15,9 @@ local board_tiles = {}
 local board_glow = {}
 local hover_column = -1
 local hover_row = -1
+local score = 0
+local level = 1
+
 
 math.randomseed(100000 * (socket.gettime() % 1))
 for column = 1, BOARD_COLUMNS do
@@ -111,24 +114,30 @@ local function remove_columns()
 				board_tiles[column] = board_tiles[column-1]
 				board_tiles[column-1] = dummy
 				slide = true
+				score = score + level * 100
 			end
 		end
 	end
 end
 
 local function make_move()
+	local count = 0
 	for column = 1, BOARD_COLUMNS do
 		for row = 1, BOARD_ROWS do
 			while board_glow[column][row] == GREEN_TILE do
+				count = count + 1
 				remove_tile(column, row)
 			end
 		end
 	end
+	print(count)
+	score = score + count * (count - 1) / 2
 	remove_columns()
 	update_glow()	
 end
 
 function update(self, dt)
+	local group_size = 0
 	for column = 1, BOARD_COLUMNS do
 		for row = 1, BOARD_ROWS do
 			local tile = EMPTY_TILE
@@ -139,9 +148,15 @@ function update(self, dt)
 			tile = board_tiles[column][row]
 			tilemap.set_tile("/Board#Board","foreground",column,row,tile)
 			tile = board_glow[column][row]
+			if tile~=0 then
+				group_size = group_size + 1
+			end
 			tilemap.set_tile("/Board#Board","glow",column,row,tile)
 		end
 	end
+	label.set_text("/Board#score_label", "Score: "..score)
+	label.set_text("/Board#group_label", "Group: "..group_size)
+	label.set_text("/Board#level_label", "Level: "..level)
 end
 
 --function on_message(self, message_id, message, sender)
