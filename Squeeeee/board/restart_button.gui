@@ -13,10 +13,12 @@ nodes {
     y: 80.0
   }
   color {
+    x: 0.502
     y: 0.0
+    z: 0.502
   }
   type: TYPE_BOX
-  id: "button_face"
+  id: "reset_button_base"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
@@ -26,8 +28,25 @@ nodes {
     y: 600.0
   }
   size {
-    x: 200.0
-    y: 100.0
+    x: 156.0
+    y: 76.0
+  }
+  color {
+    y: 0.0
+  }
+  type: TYPE_BOX
+  id: "reset_button_face"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 880.0
+    y: 600.0
+  }
+  size {
+    x: 160.0
+    y: 80.0
   }
   color {
     x: 0.502
@@ -37,8 +56,68 @@ nodes {
   type: TYPE_TEXT
   text: "Restart"
   font: "ui_font"
-  id: "button_text"
+  id: "reset_button_text"
   inherit_alpha: true
+}
+nodes {
+  position {
+    x: 880.0
+    y: 520.0
+  }
+  size {
+    x: 160.0
+    y: 80.0
+  }
+  color {
+    x: 0.502
+    y: 0.0
+    z: 0.502
+  }
+  type: TYPE_BOX
+  id: "next_level_button_base"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: 880.0
+    y: 520.0
+  }
+  size {
+    x: 156.0
+    y: 76.0
+  }
+  color {
+    y: 0.0
+  }
+  type: TYPE_BOX
+  id: "next_level_button_face"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: 880.0
+    y: 520.0
+  }
+  size {
+    x: 160.0
+    y: 80.0
+  }
+  color {
+    x: 0.502
+    y: 0.0
+    z: 0.502
+  }
+  type: TYPE_TEXT
+  text: "Next Level\n"
+  ""
+  font: "ui_font"
+  id: "next_level_button_text"
+  inherit_alpha: true
+  visible: false
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

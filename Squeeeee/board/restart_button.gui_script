@@ -9,19 +9,31 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+	local reset_button_base =gui.get_node("reset_button_base")
+	local reset_button_face =gui.get_node("reset_button_face")
+	local reset_button_text = gui.get_node("reset_button_text")
+	if message_id==hash("moves_left") then
+		gui.set_visible(reset_button_base, false)	
+		gui.set_visible(reset_button_face, false)	
+		gui.set_visible(reset_button_text, false)	
+	elseif message_id==hash("no_moves_left") then
+		gui.set_visible(reset_button_base, true)	
+		gui.set_visible(reset_button_face, true)	
+		gui.set_visible(reset_button_text, true)	
+	end
 end
 
 function on_input(self, action_id, action)
-	local button_face =gui.get_node("button_face")
-	local button_text = gui.get_node("button_text")
+	local reset_button_base =gui.get_node("reset_button_base")
+	local reset_button_text = gui.get_node("reset_button_text")
 	if action_id==nil then
-		if gui.pick_node(button_face, action.x, action.y) then
-			gui.set_color(button_text, vmath.vector4(1,1,1,1))
+		if gui.pick_node(reset_button_base, action.x, action.y) then
+			gui.set_color(reset_button_text, vmath.vector4(1,1,1,1))
 		else
-			gui.set_color(button_text, vmath.vector4(0.5, 0, 0.5, 1))
+			gui.set_color(reset_button_text, vmath.vector4(0.5, 0, 0.5, 1))
 		end
 	elseif action_id == hash("click") and action.pressed then
-		if gui.pick_node(button_face, action.x, action.y) then
+		if gui.pick_node(reset_button_base, action.x, action.y) and gui.get_visible(reset_button_base) then
 			msg.post("/Board", "reset")
 		end
 	end

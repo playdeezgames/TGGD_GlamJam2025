@@ -9,7 +9,7 @@ local GREEN_TILE = 15
 local RED_TILE = 14
 local EMPTY_TILE = 0
 local MINIMUM_TILE = 1
-local MAXIMUM_TILE = 4
+local COMPLETION_GOAL = 90
 
 local board_tiles = {}
 local board_glow = {}
@@ -18,13 +18,29 @@ local hover_row = -1
 local score = 0
 local level = 1
 
+local function current_maximum_tile()
+	return 3 + level
+end
+
 local function reset_board()
 	for column = 1, BOARD_COLUMNS do
 		for row = 1, BOARD_ROWS do
-			board_tiles[column][row]=math.random(MINIMUM_TILE, MAXIMUM_TILE)
+			board_tiles[column][row]=math.random(MINIMUM_TILE, current_maximum_tile())
 			board_glow[column][row]=0
 		end
 	end
+end
+
+local function get_percentage()
+	local count = 100
+	for column = 1, BOARD_COLUMNS do
+		for row = 1, BOARD_ROWS do
+			if board_tiles[column][row]~=0 then
+				count = count - 1
+			end
+		end
+	end
+	return count
 end
 
 local function reset_game()
@@ -55,7 +71,6 @@ reset_game()
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("@render:", "clear_color", { color = vmath.vector4(1, 0.75, 1, 0) } )
 end
 
 local deltas = {
@@ -81,6 +96,17 @@ local function get_neighbor_count(column, row)
 		end
 	end
 	return result
+end
+
+local function has_move_left()
+	for column = 1, BOARD_COLUMNS do
+		for row = 1, BOARD_ROWS do
+			if get_neighbor_count(column, row)>0 then
+				return true
+			end
+		end
+	end
+	return false
 end
 
 local function set_tile_glow(column, row)
@@ -182,6 +208,16 @@ function update(self, dt)
 	label.set_text("/Board#score_label", "Score: "..score)
 	label.set_text("/Board#group_label", "Group: "..group_size)
 	label.set_text("/Board#level_label", "Level: "..level)
+	local completion = get_percentage()
+	label.set_text("/Board#percentage_label", "Complete: "..completion.."%")
+	if completion>=COMPLETION_GOAL then
+		
+	end
+	if has_move_left() then
+		msg.post("/Board#restart_button", "moves_left")
+	else
+		msg.post("/Board#restart_button", "no_moves_left")
+	end
 end
 
 function on_message(self, message_id, message, sender)
