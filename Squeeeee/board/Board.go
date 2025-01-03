@@ -33,3 +33,7 @@ components {
     y: 80.0
   }
 }
+components {
+  id: "restart_button"
+  component: "/board/restart_button.gui"
+}
