@@ -1,0 +1,17 @@
+default_animation: "buttonslice9"
+material: "/builtins/materials/sprite.material"
+slice9 {
+  x: 12.0
+  y: 12.0
+  z: 12.0
+  w: 12.0
+}
+size {
+  x: 64.0
+  y: 64.0
+}
+size_mode: SIZE_MODE_MANUAL
+textures {
+  sampler: "texture_sampler"
+  texture: "/board/sproits.atlas"
+}

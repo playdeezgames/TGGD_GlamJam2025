@@ -63,3 +63,51 @@ embedded_components {
     z: 0.1
   }
 }
+embedded_components {
+  id: "sfx1"
+  type: "sound"
+  data: "sound: \"/board/sfx1.wav\"\n"
+  ""
+}
+embedded_components {
+  id: "sfx2"
+  type: "sound"
+  data: "sound: \"/board/sfx2.wav\"\n"
+  ""
+}
+embedded_components {
+  id: "sfx3"
+  type: "sound"
+  data: "sound: \"/board/sfx3.wav\"\n"
+  ""
+}
+embedded_components {
+  id: "sfx4"
+  type: "sound"
+  data: "sound: \"/board/sfx4.wav\"\n"
+  ""
+}
+embedded_components {
+  id: "sfx5"
+  type: "sound"
+  data: "sound: \"/board/sfx5.wav\"\n"
+  ""
+}
+embedded_components {
+  id: "sfx6"
+  type: "sound"
+  data: "sound: \"/board/sfx6.wav\"\n"
+  ""
+}
+embedded_components {
+  id: "sfx7"
+  type: "sound"
+  data: "sound: \"/board/sfx7.wav\"\n"
+  ""
+}
+embedded_components {
+  id: "sfx8"
+  type: "sound"
+  data: "sound: \"/board/sfx8.wav\"\n"
+  ""
+}

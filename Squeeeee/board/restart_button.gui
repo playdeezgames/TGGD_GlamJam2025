@@ -3,6 +3,10 @@ fonts {
   name: "ui_font"
   font: "/board/ui_font.font"
 }
+textures {
+  name: "sproits"
+  texture: "/board/sproits.atlas"
+}
 nodes {
   position {
     x: 880.0
@@ -12,32 +16,16 @@ nodes {
     x: 160.0
     y: 80.0
   }
-  color {
-    x: 0.502
-    y: 0.0
-    z: 0.502
-  }
   type: TYPE_BOX
+  texture: "sproits/buttonslice9"
   id: "reset_button_base"
   inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 880.0
-    y: 600.0
+  slice9 {
+    x: 12.0
+    y: 12.0
+    z: 12.0
+    w: 12.0
   }
-  size {
-    x: 156.0
-    y: 76.0
-  }
-  color {
-    y: 0.0
-  }
-  type: TYPE_BOX
-  id: "reset_button_face"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
@@ -68,33 +56,16 @@ nodes {
     x: 160.0
     y: 80.0
   }
-  color {
-    x: 0.502
-    y: 0.0
-    z: 0.502
-  }
   type: TYPE_BOX
+  texture: "sproits/buttonslice9"
   id: "next_level_button_base"
   inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
-}
-nodes {
-  position {
-    x: 880.0
-    y: 520.0
+  slice9 {
+    x: 12.0
+    y: 12.0
+    z: 12.0
+    w: 12.0
   }
-  size {
-    x: 156.0
-    y: 76.0
-  }
-  color {
-    y: 0.0
-  }
-  type: TYPE_BOX
-  id: "next_level_button_face"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
   visible: false
 }
 nodes {
@@ -121,3 +92,7 @@ nodes {
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
+materials {
+  name: "gui"
+  material: "/builtins/materials/gui.material"
+}

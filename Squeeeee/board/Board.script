@@ -10,6 +10,7 @@ local RED_TILE = 14
 local EMPTY_TILE = 0
 local MINIMUM_TILE = 1
 local COMPLETION_GOAL = 90
+local MAXIMUM_TILE = 8
 
 local board_tiles = {}
 local board_glow = {}
@@ -17,9 +18,19 @@ local hover_column = -1
 local hover_row = -1
 local score = 0
 local level = 1
+local sfx_table = {
+	"/Board#sfx1",
+	"/Board#sfx2",
+	"/Board#sfx3",
+	"/Board#sfx4",
+	"/Board#sfx5",
+	"/Board#sfx6",
+	"/Board#sfx7",
+	"/Board#sfx8"
+}
 
 local function current_maximum_tile()
-	return 3 + level
+	return math.min(3 + level, MAXIMUM_TILE)
 end
 
 local function reset_board()
@@ -130,7 +141,6 @@ local function set_tile_glow(column, row)
 		end
 	end
 end
-	
 
 local function update_glow()
 	for column = 1, BOARD_COLUMNS do
@@ -169,6 +179,9 @@ local function remove_columns()
 end
 
 local function make_move()
+	if hover_column>=1 and hover_row>=1 and hover_column<=BOARD_COLUMNS and hover_row<=BOARD_ROWS and get_neighbor_count(hover_column, hover_row) then
+		sound.play(sfx_table[board_tiles[hover_column][hover_row]],{speed=0.9+math.random()*0.2})
+	end
 	local count = 0
 	local rightmost = get_rightmost_column()
 	for column = 1, BOARD_COLUMNS do
@@ -185,6 +198,11 @@ local function make_move()
 	print(columns_eliminated)
 	score = score + columns_eliminated * level * 100
 	update_glow()	
+end
+
+local function next_level()
+	level = level + 1
+	reset_board()
 end
 
 function update(self, dt)
@@ -211,7 +229,9 @@ function update(self, dt)
 	local completion = get_percentage()
 	label.set_text("/Board#percentage_label", "Complete: "..completion.."%")
 	if completion>=COMPLETION_GOAL then
-		
+		msg.post("/Board#restart_button", "next_level_qualified")
+	else
+		msg.post("/Board#restart_button", "next_level_disqualified")
 	end
 	if has_move_left() then
 		msg.post("/Board#restart_button", "moves_left")
@@ -223,6 +243,8 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("reset") then
 		reset_game()
+	elseif message_id == hash("next_level") then
+		next_level()
 	end
 end
 
