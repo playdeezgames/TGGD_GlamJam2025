@@ -20,6 +20,7 @@ function on_message(self, message_id, message, sender)
 	local reset_button_text = gui.get_node("reset_button_text")
 	local next_level_button_base =gui.get_node("next_level_button_base")
 	local next_level_button_text = gui.get_node("next_level_button_text")
+	local shuffle = gui.get_node("shuffle")
 	if message_id==hash("moves_left") then
 		gui.set_visible(reset_button_base, false)	
 		gui.set_visible(reset_button_text, false)	
@@ -31,7 +32,11 @@ function on_message(self, message_id, message, sender)
 		gui.set_visible(next_level_button_text, true)	
 	elseif message_id==hash("next_level_disqualified") then
 		gui.set_visible(next_level_button_base, false)	
-		gui.set_visible(next_level_button_text, false)	
+		gui.set_visible(next_level_button_text, false)
+	elseif message_id == hash("shuffle_enabled") then
+		gui.set_visible(shuffle, true)	
+	elseif message_id == hash("shuffle_disabled") then
+		gui.set_visible(shuffle, false)	
 	end
 end
 

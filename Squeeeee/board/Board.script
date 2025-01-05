@@ -21,6 +21,7 @@ local hover_column = -1
 local hover_row = -1
 local score = 0
 local level = 1
+local shuffle_enabled = true
 local sfx_table = {
 	"/Board#sfx1",
 	"/Board#sfx2",
@@ -212,6 +213,25 @@ local function next_level()
 	reset_board()
 end
 
+local function update_token_count()
+	local token_count = 0
+	if hover_column>=1 and hover_column<=BOARD_COLUMNS and hover_row>=1 and hover_row<=BOARD_ROWS then
+		local token = board_tiles[hover_column][hover_row]
+		for column = 1, BOARD_COLUMNS do
+			for row = 1, BOARD_ROWS do
+				if board_tiles[column][row]==token then
+					token_count = token_count + 1
+				end
+			end
+		end
+	end
+	if token_count>0 then
+		label.set_text("/Board#token_count_label", "#Tokens: "..token_count)
+	else
+		label.set_text("/Board#token_count_label", "")
+	end
+end
+
 function update(self, dt)
 	local group_size = 0
 	for column = 1, BOARD_COLUMNS do
@@ -233,6 +253,7 @@ function update(self, dt)
 	label.set_text("/Board#score_label", "Score: "..score)
 	label.set_text("/Board#group_label", "Group: "..group_size)
 	label.set_text("/Board#level_label", "Level: "..level)
+	update_token_count()
 	label.set_text("/Board#high_score_label", "High: "..highscores.get_high_score())
 	label.set_text("/Board#avg_score_label", "Avg: "..highscores.get_average_score())
 	label.set_text("/Board#games_played_label", "#Games: "..highscores.get_games_played())
@@ -247,6 +268,11 @@ function update(self, dt)
 		msg.post("/Board#restart_button", "moves_left")
 	else
 		msg.post("/Board#restart_button", "no_moves_left")
+	end
+	if shuffle_enabled then
+		msg.post("/Board#restart_button", "shuffle_enabled")
+	else
+		msg.post("/Board#restart_button", "shuffle_disabled")
 	end
 end
 

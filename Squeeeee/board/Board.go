@@ -144,7 +144,7 @@ embedded_components {
   ""
   position {
     x: 80.0
-    y: 208.0
+    y: 240.0
     z: 0.1
   }
 }
@@ -166,7 +166,7 @@ embedded_components {
   ""
   position {
     x: 80.0
-    y: 144.0
+    y: 176.0
     z: 0.1
   }
 }
@@ -190,7 +190,51 @@ embedded_components {
   ""
   position {
     x: 80.0
-    y: 176.0
+    y: 208.0
+    z: 0.1
+  }
+}
+embedded_components {
+  id: "percentage_goal_label"
+  type: "label"
+  data: "size {\n"
+  "  x: 160.0\n"
+  "  y: 32.0\n"
+  "}\n"
+  "color {\n"
+  "  x: 0.502\n"
+  "  y: 0.0\n"
+  "  z: 0.502\n"
+  "}\n"
+  "text: \"Goal: 90%\"\n"
+  "font: \"/builtins/fonts/default.font\"\n"
+  "material: \"/builtins/fonts/label-df.material\"\n"
+  ""
+  position {
+    x: 80.0
+    y: 144.0
+    z: 0.1
+  }
+}
+embedded_components {
+  id: "token_count_label"
+  type: "label"
+  data: "size {\n"
+  "  x: 160.0\n"
+  "  y: 32.0\n"
+  "}\n"
+  "color {\n"
+  "  x: 0.502\n"
+  "  y: 0.0\n"
+  "  z: 0.502\n"
+  "}\n"
+  "text: \"Tokens: 0\"\n"
+  "font: \"/builtins/fonts/default.font\"\n"
+  "material: \"/builtins/fonts/label-df.material\"\n"
+  ""
+  position {
+    x: 80.0
+    y: 272.0
     z: 0.1
   }
 }

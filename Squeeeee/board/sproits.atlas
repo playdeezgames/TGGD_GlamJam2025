@@ -10,4 +10,7 @@ images {
 images {
   image: "/board/speaker.png"
 }
+images {
+  image: "/board/clockwise-rotation.png"
+}
 extrude_borders: 2
