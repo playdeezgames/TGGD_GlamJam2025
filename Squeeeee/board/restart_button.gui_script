@@ -24,8 +24,8 @@ function on_message(self, message_id, message, sender)
 		gui.set_visible(reset_button_base, false)	
 		gui.set_visible(reset_button_text, false)	
 	elseif message_id==hash("no_moves_left") then
-		gui.set_visible(reset_button_base, true)	
-		gui.set_visible(reset_button_text, true)	
+		gui.set_visible(reset_button_base, not gui.get_visible(next_level_button_base))	
+		gui.set_visible(reset_button_text, not gui.get_visible(next_level_button_base))	
 	elseif message_id==hash("next_level_qualified") then
 		gui.set_visible(next_level_button_base, true)	
 		gui.set_visible(next_level_button_text, true)	

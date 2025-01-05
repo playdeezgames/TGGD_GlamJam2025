@@ -1,4 +1,5 @@
 local options = require("options.options")
+local highscores = require("hiscores.hiscores")
 
 local BOARD_OFFSET_X = 160
 local BOARD_OFFSET_Y = 0
@@ -232,6 +233,9 @@ function update(self, dt)
 	label.set_text("/Board#score_label", "Score: "..score)
 	label.set_text("/Board#group_label", "Group: "..group_size)
 	label.set_text("/Board#level_label", "Level: "..level)
+	label.set_text("/Board#high_score_label", "High: "..highscores.get_high_score())
+	label.set_text("/Board#avg_score_label", "Avg: "..highscores.get_average_score())
+	label.set_text("/Board#games_played_label", "#Games: "..highscores.get_games_played())
 	local completion = get_percentage()
 	label.set_text("/Board#percentage_label", "Complete: "..completion.."%")
 	if completion>=COMPLETION_GOAL then
@@ -248,6 +252,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("reset") then
+		highscores.record_game(score)
 		reset_game()
 	elseif message_id == hash("next_level") then
 		next_level()
