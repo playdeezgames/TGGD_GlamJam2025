@@ -1,4 +1,13 @@
 images {
   image: "/board/buttonslice9.png"
 }
+images {
+  image: "/board/background.png"
+}
+images {
+  image: "/board/speaker-off.png"
+}
+images {
+  image: "/board/speaker.png"
+}
 extrude_borders: 2

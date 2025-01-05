@@ -90,6 +90,28 @@ nodes {
   inherit_alpha: true
   visible: false
 }
+nodes {
+  position {
+    x: 32.0
+    y: 608.0
+  }
+  type: TYPE_BOX
+  texture: "sproits/speaker"
+  id: "speaker_on"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 32.0
+    y: 608.0
+  }
+  type: TYPE_BOX
+  texture: "sproits/speaker-off"
+  id: "speaker_off"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
 materials {

@@ -1,3 +1,5 @@
+local options = require("options.options")
+
 local BOARD_OFFSET_X = 160
 local BOARD_OFFSET_Y = 0
 local COLUMN_WIDTH = 64
@@ -28,6 +30,8 @@ local sfx_table = {
 	"/Board#sfx7",
 	"/Board#sfx8"
 }
+
+options.load()
 
 local function current_maximum_tile()
 	return math.min(3 + level, MAXIMUM_TILE)
@@ -179,8 +183,10 @@ local function remove_columns()
 end
 
 local function make_move()
-	if hover_column>=1 and hover_row>=1 and hover_column<=BOARD_COLUMNS and hover_row<=BOARD_ROWS and get_neighbor_count(hover_column, hover_row) then
-		sound.play(sfx_table[board_tiles[hover_column][hover_row]],{speed=0.9+math.random()*0.2})
+	if hover_column>=1 and hover_row>=1 and hover_column<=BOARD_COLUMNS and hover_row<=BOARD_ROWS and get_neighbor_count(hover_column, hover_row) > 0 then
+		if options.sfx_enabled then
+			sound.play(sfx_table[board_tiles[hover_column][hover_row]],{speed=0.9+math.random()*0.2})
+		end
 	end
 	local count = 0
 	local rightmost = get_rightmost_column()

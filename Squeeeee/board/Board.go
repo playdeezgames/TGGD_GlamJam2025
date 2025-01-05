@@ -111,3 +111,18 @@ embedded_components {
   data: "sound: \"/board/sfx8.wav\"\n"
   ""
 }
+embedded_components {
+  id: "sprite"
+  type: "sprite"
+  data: "default_animation: \"background\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/board/sproits.atlas\"\n"
+  "}\n"
+  ""
+  position {
+    x: 480.0
+    y: 320.0
+  }
+}
