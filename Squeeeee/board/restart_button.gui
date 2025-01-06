@@ -123,6 +123,37 @@ nodes {
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
+nodes {
+  position {
+    x: 32.0
+    y: 480.0
+  }
+  color {
+    x: 0.502
+    y: 0.0
+    z: 0.502
+  }
+  type: TYPE_BOX
+  texture: "sproits/unlit-bomb"
+  id: "bomb_base"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 38.0
+    y: 475.0
+  }
+  size {
+    x: 32.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "ui_font"
+  id: "bomb_text"
+  inherit_alpha: true
+}
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
 materials {

@@ -8,6 +8,7 @@ local ROW_HEIGHT = 64
 local BOARD_COLUMNS = 10
 local BOARD_ROWS = 10
 local CURSOR_TILE = 16
+local X_TILE = 12
 local GREEN_TILE = 15
 local RED_TILE = 14
 local EMPTY_TILE = 0
@@ -22,6 +23,8 @@ local hover_row = -1
 local score = 0
 local level = 1
 local shuffle_enabled = true
+local bombs_available = 0
+local bomb_active = false
 local sfx_table = {
 	"/Board#sfx1",
 	"/Board#sfx2",
@@ -47,6 +50,7 @@ local function reset_board()
 		end
 	end
 	shuffle_enabled = true
+	bomb_active = false
 end
 
 local function get_percentage()
@@ -64,6 +68,8 @@ end
 local function reset_game()
 	level=1
 	score=0
+	bombs_available = 0
+	bomb_active = false
 	reset_board()
 end
 
@@ -161,7 +167,7 @@ local function update_glow()
 end
 
 local function remove_tile(column, row)
-	if board_glow[column][row] == GREEN_TILE then
+	if (not bomb_active and board_glow[column][row] == GREEN_TILE) or (bomb_active and board_glow[column][row] == RED_TILE) then
 		for r = row, BOARD_ROWS - 1 do
 			board_tiles[column][r] = board_tiles[column][r+1]
 			board_glow[column][r] = board_glow[column][r+1]
@@ -186,30 +192,43 @@ local function remove_columns()
 end
 
 local function make_move()
-	if hover_column>=1 and hover_row>=1 and hover_column<=BOARD_COLUMNS and hover_row<=BOARD_ROWS and get_neighbor_count(hover_column, hover_row) > 0 then
-		if options.sfx_enabled then
-			sound.play(sfx_table[board_tiles[hover_column][hover_row]],{speed=0.9+math.random()*0.2})
-		end
-	end
-	local count = 0
-	local rightmost = get_rightmost_column()
-	for column = 1, BOARD_COLUMNS do
-		for row = 1, BOARD_ROWS do
-			while board_glow[column][row] == GREEN_TILE do
-				count = count + 1
-				remove_tile(column, row)
+	if hover_column>=1 and hover_row>=1 and hover_column<=BOARD_COLUMNS and hover_row<=BOARD_ROWS then
+		if get_neighbor_count(hover_column, hover_row) > 0 then
+			if options.sfx_enabled then
+				sound.play(sfx_table[board_tiles[hover_column][hover_row]],{speed=0.9+math.random()*0.2})
 			end
 		end
+		if bomb_active then
+			if board_tiles[hover_column][hover_row] > 0 then
+				remove_tile(hover_column, hover_row)
+				bombs_available = bombs_available - 1
+				bomb_active = false
+				remove_columns()
+				update_glow()	
+			end
+		else
+			local count = 0
+			local rightmost = get_rightmost_column()
+			for column = 1, BOARD_COLUMNS do
+				for row = 1, BOARD_ROWS do
+					while board_glow[column][row] == GREEN_TILE do
+						count = count + 1
+						remove_tile(column, row)
+					end
+				end
+			end
+			score = score + count * (count - 1) / 2
+			remove_columns()
+			local columns_eliminated = rightmost - get_rightmost_column()
+			print(columns_eliminated)
+			score = score + columns_eliminated * level * 100
+			update_glow()	
+		end
 	end
-	score = score + count * (count - 1) / 2
-	remove_columns()
-	local columns_eliminated = rightmost - get_rightmost_column()
-	print(columns_eliminated)
-	score = score + columns_eliminated * level * 100
-	update_glow()	
 end
 
 local function next_level()
+	bombs_available = bombs_available + level
 	level = level + 1
 	reset_board()
 end
@@ -263,7 +282,11 @@ function update(self, dt)
 		for row = 1, BOARD_ROWS do
 			local tile = EMPTY_TILE
 			if column==hover_column and row==hover_row then
-				tile = CURSOR_TILE
+				if bomb_active then
+					tile = X_TILE
+				else
+					tile = CURSOR_TILE
+				end
 			end
 			tilemap.set_tile("/Board#Board","hilite",column,row,tile)
 			tile = board_tiles[column][row]
@@ -299,6 +322,7 @@ function update(self, dt)
 	else
 		msg.post("/Board#restart_button", "shuffle_disabled")
 	end
+	msg.post("/Board#restart_button", "update_bombs", {bombs=bombs_available, active = bomb_active})
 end
 
 function on_message(self, message_id, message, sender)
@@ -309,6 +333,8 @@ function on_message(self, message_id, message, sender)
 		next_level()
 	elseif message_id == hash("shuffle") then
 		shuffle_board()
+	elseif message_id == hash("click_bomb") then
+		bomb_active = not bomb_active
 	end
 end
 

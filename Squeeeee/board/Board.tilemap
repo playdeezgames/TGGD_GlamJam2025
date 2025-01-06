@@ -1,7 +1,7 @@
 tile_set: "/board/SqueeTiles.tilesource"
 layers {
   id: "glow"
-  z: 0.8
+  z: 0.3
   cell {
     x: 2
     y: 2
@@ -120,7 +120,7 @@ layers {
 }
 layers {
   id: "foreground"
-  z: 0.9
+  z: 0.5
   cell {
     x: 0
     y: 0
@@ -624,7 +624,7 @@ layers {
 }
 layers {
   id: "hilite"
-  z: 1.0
+  z: 0.8
   cell {
     x: 5
     y: 3

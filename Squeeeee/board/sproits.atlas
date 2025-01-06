@@ -13,4 +13,13 @@ images {
 images {
   image: "/board/clockwise-rotation.png"
 }
+images {
+  image: "/board/info.png"
+}
+images {
+  image: "/board/help.png"
+}
+images {
+  image: "/board/unlit-bomb.png"
+}
 extrude_borders: 2
