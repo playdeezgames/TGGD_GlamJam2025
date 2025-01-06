@@ -46,6 +46,7 @@ local function reset_board()
 			board_glow[column][row]=0
 		end
 	end
+	shuffle_enabled = true
 end
 
 local function get_percentage()
@@ -232,6 +233,30 @@ local function update_token_count()
 	end
 end
 
+local function shuffle_board()
+	if not shuffle_enabled then return end
+	shuffle_enabled = false
+	local tokens = {}
+	for column = 1, BOARD_COLUMNS do
+		for row = 1, BOARD_ROWS do
+			local tile = board_tiles[column][row]
+			if tile ~= 0 then
+				table.insert(tokens, tile)
+			end
+		end
+	end
+	for column = 1, BOARD_COLUMNS do
+		for row = 1, BOARD_ROWS do
+			local tile = board_tiles[column][row]
+			if tile ~= 0 then
+				local index = math.random(1, #tokens)
+				board_tiles[column][row] = tokens[index]
+				table.remove(tokens, index)
+			end
+		end
+	end
+end
+
 function update(self, dt)
 	local group_size = 0
 	for column = 1, BOARD_COLUMNS do
@@ -282,6 +307,8 @@ function on_message(self, message_id, message, sender)
 		reset_game()
 	elseif message_id == hash("next_level") then
 		next_level()
+	elseif message_id == hash("shuffle") then
+		shuffle_board()
 	end
 end
 
